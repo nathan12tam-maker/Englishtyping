@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🐣 小恐龍打字練習場 ✨ 準備好再開始計時</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #b8e1fc 0%, #f9e6b3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI Emoji', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            background-color: #fffef7;
+            border-radius: 80px 80px 70px 70px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2), inset 0 1px 4px rgba(255, 255, 255, 0.8);
+            max-width: 950px;
+            width: 100%;
+            padding: 20px 25px 40px 25px;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: 3px solid #ffcf4a;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #ff9a3c, #ff5e7c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0 0 5px;
+            text-shadow: 2px 2px 10px #ffe0a3;
+        }
+
+        .sub {
+            font-size: 1rem;
+            background-color: #ffecb3;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 40px;
+            color: #d2691e;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .top-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: #fdf8e0;
+            border-radius: 60px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border: 2px solid #ffe0a3;
+            box-shadow: inset 0 1px 4px #ffeecc, 0 6px 0 #e7ca8e;
+        }
+
+        .timer-box {
+            background: #ffefcf;
+            border-radius: 50px;
+            padding: 6px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: bold;
+            font-size: 1.6rem;
+            color: #c26315;
+        }
+
+        .timer-number {
+            font-family: monospace;
+            font-size: 2rem;
+            font-weight: bold;
+            background: #fff2db;
+            padding: 0 12px;
+            border-radius: 40px;
+            color: #e07c1f;
+            min-width: 100px;
+        }
+
+        .score-star-area {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: #fff0c8;
+            padding: 5px 20px;
+            border-radius: 50px;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #aa6f20;
+        }
+
+        .stars {
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: #ffc107;
+        }
+
+        .time-setting {
+            background: #fef3df;
+            border-radius: 50px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border: 2px solid #ffdd99;
+        }
+
+        .time-setting label {
+            font-weight: bold;
+            color: #b45f1b;
+            font-size: 1rem;
+        }
+
+        .time-input {
+            font-size: 1.2rem;
+            width: 80px;
+            text-align: center;
+            border-radius: 40px;
+            border: 2px solid #ffbc6e;
+            background: white;
+            padding: 6px 0;
+            font-weight: bold;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .btn-small {
+            font-size: 0.9rem;
+            padding: 6px 16px;
+            background: #ffd966;
+            box-shadow: 0 3px 0 #bb8822;
+            transform: translateY(-1px);
+        }
+
+        .challenge-card {
+            background: #fffaec;
+            border-radius: 65px;
+            padding: 25px 15px;
+            margin: 15px 0;
+            box-shadow: 0 15px 0 #ffe0a3;
+            border: 2px solid #ffdc97;
+        }
+
+        .question-word {
+            font-size: 5rem;
+            font-weight: bold;
+            background: #fffff0;
+            display: inline-block;
+            padding: 0.2em 0.6em;
+            border-radius: 70px;
+            letter-spacing: 6px;
+            color: #3b2a1f;
+            font-family: 'Courier New', 'Comic Neue', monospace;
+            box-shadow: inset 0 2px 8px #e9dbbd, 0 8px 0 #d4b87a;
+            margin-bottom: 20px;
+        }
+
+        .instruction {
+            font-size: 1.2rem;
+            background: #ffefbf;
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 35px;
+            color: #c25d00;
+            font-weight: bold;
+        }
+
+        .typing-input {
+            font-size: 2rem;
+            padding: 12px 20px;
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            font-family: 'Comic Neue', 'Courier New', monospace;
+            font-weight: bold;
+            background-color: #fffcf0;
+            border: 4px solid #ffcd94;
+            border-radius: 60px;
+            outline: none;
+            color: #4e3a28;
+        }
+
+        .typing-input:focus {
+            border-color: #ffaa33;
+            box-shadow: 0 0 0 5px rgba(255, 190, 80, 0.4);
+        }
+
+        .buttons {
+            margin: 20px 0 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-size: 1.2rem;
+            padding: 8px 22px;
+            border: none;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            background-color: #ffe0a3;
+            color: #a55700;
+            transition: 0.1s linear;
+            font-family: inherit;
+            box-shadow: 0 5px 0 #bb8822;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #bb8822;
+        }
+
+        .btn-primary {
+            background-color: #ffbd6e;
+            color: white;
+            text-shadow: 1px 1px 0 #b45f1b;
+        }
+
+        .btn-start {
+            background-color: #6fbf4c;
+            color: white;
+            text-shadow: 1px 1px 0 #3c7e1f;
+            box-shadow: 0 5px 0 #3c7e1f;
+            font-size: 1.4rem;
+            padding: 10px 30px;
+        }
+
+        .message-area {
+            min-height: 65px;
+            margin: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f47c2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            font-family: inherit;
+        }
+
+        .result-card {
+            background: #fff9e8;
+            border-radius: 70px;
+            padding: 25px 35px;
+            text-align: center;
+            max-width: 380px;
+            width: 80%;
+            border: 6px solid #ffc96e;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+            animation: bounceIn 0.4s ease;
+        }
+
+        .result-card h2 {
+            font-size: 2.5rem;
+            color: #e67e22;
+            margin: 0 0 10px;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: bold;
+            background: #ffecb3;
+            border-radius: 50px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+
+        .restart-btn {
+            background: #ffae5a;
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #9b4a0e;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .cute-deco {
+            font-size: 1.7rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 580px) {
+            .question-word { font-size: 3rem; }
+            .timer-number { font-size: 1.4rem; min-width: 70px; }
+            .btn { font-size: 1rem; padding: 6px 16px; }
+        }
+
+        .pop-correct {
+            animation: correctPop 0.3s ease;
+        }
+        @keyframes correctPop {
+            0% { transform: scale(1); background-color: #d4ffcf; }
+            50% { transform: scale(1.02); background-color: #b0ff9b; }
+            100% { transform: scale(1); background-color: #fffaec; }
+        }
+        
+        /* 開始前禁用輸入按鈕樣式 */
+        .disabled-zone {
+            opacity: 0.7;
+        }
+        .input-disabled {
+            background-color: #f5f0e0;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container" id="gameApp">
+    <h1>🦖 小恐龍打字練習場 ✨</h1>
+    <div class="sub">📖 不重複單字 | 準備好了再開始計時</div>
+
+    <div class="top-panel">
+        <div class="timer-box">
+            <span class="timer-icon">⏳</span>
+            <span class="timer-number" id="timerDisplay">00:00</span>
+        </div>
+        <div class="score-star-area">
+            <div class="score-item"><span>⭐</span> <span id="scoreValue">0</span> 分</div>
+            <div class="stars" id="starDisplay">☆☆☆☆☆</div>
+        </div>
+    </div>
+
+    <div class="time-setting">
+        <label>⚙️ 設定秒數 :</label>
+        <input type="number" id="timeMinutes" class="time-input" min="0" max="10" value="1" step="1" style="width: 75px;"> 
+        <span> 分 </span>
+        <input type="number" id="timeSeconds" class="time-input" min="0" max="59" value="30" step="5" style="width: 75px;">
+        <span> 秒</span>
+        <button id="applyTimeBtn" class="btn btn-small">🎮 設定時間</button>
+        <span style="font-size:0.7rem;">✨ 按下「開始挑戰」才會倒數 ✨</span>
+    </div>
+
+    <div class="challenge-card">
+        <div class="question-word" id="currentWord">cat</div>
+        <div class="instruction">⌨️ 打出相同單字後按「送出」或 Enter ⏎</div>
+        <div class="input-area">
+            <input type="text" id="userInput" class="typing-input" placeholder="在這裡打字..." autocomplete="off" autocapitalize="off" spellcheck="false" disabled>
+        </div>
+        <div class="buttons">
+            <button class="btn btn-primary" id="submitBtn" disabled>✨ 送出 ✨</button>
+            <button class="btn" id="nextBtn" disabled>🎵 跳過 / 下一題 🎵</button>
+        </div>
+        <div class="message-area" id="messageBox">
+            🧸 你好！先設定時間，再按「▶ 開始挑戰」就可以練習囉！
+        </div>
+    </div>
+    
+    <!-- 開始按鈕區塊（獨立明顯） -->
+    <div style="margin: 10px 0 5px;">
+        <button id="startGameBtn" class="btn btn-start">🌟 開始挑戰 🌟</button>
+    </div>
+    
+    <div class="cute-deco">
+        🐣 🦕 🌈 🍎 🐢 📚
+    </div>
+</div>
+
+<script>
+    // ======================= 豐富一年級單字庫 (不重複選題) =======================
+    const MASTER_WORD_LIST = [
+        "cat", "dog", "sun", "car", "bus", "hat", "ball", "fish", "bird", "ant",
+        "apple", "egg", "cow", "pig", "duck", "lion", "bear", "frog", "moon", "star",
+        "happy", "big", "red", "blue", "yellow", "mom", "dad", "toy", "run", "jump",
+        "flower", "grass", "cloud", "sweet", "tiny", "fun", "play", "book", "pen", "desk"
+    ];
+    const UNIQUE_WORDS = [...new Map(MASTER_WORD_LIST.map(w => [w, w])).values()];
+    const FINAL_WORD_POOL = UNIQUE_WORDS.length > 0 ? UNIQUE_WORDS : ["cat","dog","sun","car"];
+    
+    const CORRECT_POINTS = 10;
+    
+    // 遊戲狀態
+    let currentRawWord = "cat";
+    let score = 0;
+    let gameActive = false;          // 是否進行中 (開始按鈕後才為 true)
+    let timerInterval = null;
+    let timeRemainingSeconds = 90;
+    let totalQuestionsAttempt = 0;
+    let lastMilestone = 0;
+    
+    // 不重複選題機制
+    let recentWordsHistory = [];
+    let lastWord = "";
+    
+    function getDistinctWord() {
+        const pool = FINAL_WORD_POOL;
+        if (pool.length === 0) return "cat";
+        let blacklist = new Set();
+        const maxHistory = Math.min(pool.length - 1, 6);
+        for (let i = 0; i < recentWordsHistory.length && i < maxHistory; i++) {
+            blacklist.add(recentWordsHistory[i]);
+        }
+        let availableWords = pool.filter(w => !blacklist.has(w));
+        if (availableWords.length === 0) {
+            availableWords = pool.filter(w => w !== lastWord);
+            if (availableWords.length === 0) availableWords = [...pool];
+        }
+        const randomIndex = Math.floor(Math.random() * availableWords.length);
+        const newWord = availableWords[randomIndex];
+        recentWordsHistory.unshift(newWord);
+        if (recentWordsHistory.length > 10) recentWordsHistory.pop();
+        lastWord = newWord;
+        return newWord;
+    }
+    
+    function resetWordHistory() {
+        recentWordsHistory = [];
+        lastWord = "";
+        const firstWord = getDistinctWord();
+        currentRawWord = firstWord;
+        if (currentWordSpan) currentWordSpan.innerText = firstWord.toLowerCase();
+        return firstWord;
+    }
+    
+    // DOM 元素
+    const timerDisplaySpan = document.getElementById("timerDisplay");
+    const scoreSpan = document.getElementById("scoreValue");
+    const starDisplaySpan = document.getElementById("starDisplay");
+    const currentWordSpan = document.getElementById("currentWord");
+    const userInputField = document.getElementById("userInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const messageBox = document.getElementById("messageBox");
+    const timeMinutesInput = document.getElementById("timeMinutes");
+    const timeSecondsInput = document.getElementById("timeSeconds");
+    const applyTimeBtn = document.getElementById("applyTimeBtn");
+    const startGameBtn = document.getElementById("startGameBtn");
+    
+    function updateStarsByScore(scoreVal) {
+        let starCount = 0;
+        if (scoreVal >= 100) starCount = 5;
+        else if (scoreVal >= 70) starCount = 4;
+        else if (scoreVal >= 40) starCount = 3;
+        else if (scoreVal >= 20) starCount = 2;
+        else if (scoreVal >= 10) starCount = 1;
+        else starCount = 0;
+        let starString = "";
+        for (let i = 0; i < 5; i++) starString += (i < starCount) ? "★" : "☆";
+        starDisplaySpan.innerText = starString;
+    }
+    
+    function updateScoreUI() {
+        scoreSpan.innerText = score;
+        updateStarsByScore(score);
+        if (score >= 50 && lastMilestone < 50) {
+            showMessage("🎉 哇！超過50分！打字小英雄！", false, true);
+            lastMilestone = 50;
+        } else if (score >= 100 && lastMilestone < 100) {
+            showMessage("🏆 超強滿分100！五星打字王！ 🌟🌟🌟🌟🌟", false, true);
+            lastMilestone = 100;
+        } else if (score >= 30 && lastMilestone < 30) {
+            showMessage("🌈 30分! 繼續保持～🦕", false, true);
+            lastMilestone = 30;
+        }
+    }
+    
+    function showMessage(msg, isError = false, isSuccess = false) {
+        let icon = "🧸";
+        if (isSuccess) icon = "🎉✨";
+        else if (isError) icon = "😢";
+        messageBox.innerHTML = `${icon} ${msg}`;
+        setTimeout(() => {}, 2500);
+    }
+    
+    // 載入新題目 (只有遊戲進行中才能換)
+    function loadNewWord() {
+        if (!gameActive) return;
+        const newWord = getDistinctWord();
+        currentRawWord = newWord;
+        currentWordSpan.innerText = newWord.toLowerCase();
+        userInputField.value = "";
+        userInputField.focus();
+        const cardDiv = document.querySelector(".challenge-card");
+        if (cardDiv) cardDiv.classList.remove("pop-correct");
+        totalQuestionsAttempt++;
+    }
+    
+    function handleCorrect() {
+        if (!gameActive) return;
+        score += CORRECT_POINTS;
+        updateScoreUI();
+        const cardDiv = document.querySelector(".challenge-card");
+        if (cardDiv) {
+            cardDiv.classList.add("pop-correct");
+            setTimeout(() => cardDiv.classList.remove("pop-correct"), 300);
+        }
+        showMessage(`✔️ 正確！ +${CORRECT_POINTS}分 🎈 新單字出現囉!`, false, true);
+        loadNewWord();
+    }
+    
+    function handleIncorrect() {
+        if (!gameActive) return;
+        showMessage(`❌ 正確答案是「${currentRawWord}」，再試一次～ 單字不重複好簡單`, true, false);
+        userInputField.style.borderColor = "#ff8888";
+        setTimeout(() => {
+            if (userInputField) userInputField.style.borderColor = "#ffcd94";
+        }, 400);
+        userInputField.focus();
+    }
+    
+    function checkAnswer() {
+        if (!gameActive) {
+            showMessage("⏸ 遊戲還沒開始喔！請按「開始挑戰」計時!", false, false);
+            return;
+        }
+        const userAnswer = userInputField.value.trim();
+        if (userAnswer === "") {
+            showMessage("🐣 在框框中輸入單字吧！", false, false);
+            userInputField.focus();
+            return;
+        }
+        const normalizedUser = userAnswer.toLowerCase();
+        const normalizedCorrect = currentRawWord.toLowerCase();
+        if (normalizedUser === normalizedCorrect) {
+            handleCorrect();
+        } else {
+            handleIncorrect();
+        }
+    }
+    
+    function skipWord() {
+        if (!gameActive) {
+            showMessage("還沒開始遊戲唷！按下「開始挑戰」再跳過吧～", false, false);
+            return;
+        }
+        showMessage(`跳過「${currentRawWord}」，換一個全新單字～ 🌟`, false, false);
+        loadNewWord();
+    }
+    
+    // 計時器控制
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+    
+    function updateTimerDisplay() {
+        if (timeRemainingSeconds < 0) timeRemainingSeconds = 0;
+        const mins = Math.floor(timeRemainingSeconds / 60);
+        const secs = timeRemainingSeconds % 60;
+        timerDisplaySpan.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    function startTimer() {
+        if (timerInterval) stopTimer();
+        timerInterval = setInterval(() => {
+            if (!gameActive) return;
+            if (timeRemainingSeconds <= 1) {
+                timeRemainingSeconds = 0;
+                updateTimerDisplay();
+                timeOutFinish();
+            } else {
+                timeRemainingSeconds--;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+    
+    function timeOutFinish() {
+        if (!gameActive) return;
+        gameActive = false;
+        stopTimer();
+        // 停用輸入與按鈕
+        userInputField.disabled = true;
+        submitBtn.disabled = true;
+        nextBtn.disabled = true;
+        userInputField.classList.add("input-disabled");
+        showResultModal();
+    }
+    
+    function showResultModal() {
+        const existingOverlay = document.querySelector(".result-overlay");
+        if (existingOverlay) existingOverlay.remove();
+        const totalScore = score;
+        const starTotal = (() => {
+            if (totalScore >= 100) return 5;
+            if (totalScore >= 70) return 4;
+            if (totalScore >= 40) return 3;
+            if (totalScore >= 20) return 2;
+            if (totalScore >= 10) return 1;
+            return 0;
+        })();
+        const starEmojis = "★".repeat(starTotal) + "☆".repeat(5 - starTotal);
+        const overlay = document.createElement("div");
+        overlay.className = "result-overlay";
+        overlay.innerHTML = `
+            <div class="result-card">
+                <h2>⏰ 時間到啦！ 🎯</h2>
+                <div style="font-size:1.5rem;">你的總分</div>
+                <div class="result-score">${totalScore} 分</div>
+                <div style="font-size:1.8rem; letter-spacing:4px; margin:5px 0;">${starEmojis}</div>
+                <div style="margin: 15px 0 10px; font-size:1.1rem;">✨ 完成 ${totalQuestionsAttempt} 個單字挑戰 ✨</div>
+                <button id="restartFromResultBtn" class="restart-btn">🐣 再玩一次 🐣</button>
+                <div style="margin-top: 12px; font-size:0.8rem;">⭐ 按下按鈕或重新設定時間即可挑戰</div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        const restartBtn = document.getElementById("restartFromResultBtn");
+        if (restartBtn) {
+            restartBtn.addEventListener("click", () => {
+                overlay.remove();
+                prepareGameForStart();  // 重置成未開始狀態
+            });
+        }
+    }
+    
+    // 重置為未開始狀態 (不清分數但停用計時, 但為了公平讓小朋友重新開始時歸零? 依據使用者體驗: 重新玩應該全新開始)
+    // 調整為全新重置(分數歸零, 題目重置)
+    function prepareGameForStart() {
+        // 完全重置所有數據 (類似全新未開始)
+        stopTimer();
+        gameActive = false;
+        // 取得目前設定的時間 (顯示但不倒數)
+        let mins = parseInt(timeMinutesInput.value) || 0;
+        let secs = parseInt(timeSecondsInput.value) || 0;
+        let totalSec = mins * 60 + secs;
+        if (totalSec < 5) totalSec = 30;
+        timeRemainingSeconds = totalSec;
+        updateTimerDisplay();
+        
+        score = 0;
+        totalQuestionsAttempt = 0;
+        lastMilestone = 0;
+        updateScoreUI();
+        
+        // 重置單字歷史並且取得新單字
+        resetWordHistory();
+        totalQuestionsAttempt = 1;  // 出現第一題
+        currentWordSpan.innerText = currentRawWord.toLowerCase();
+        userInputField.value = "";
+        
+        // 停用輸入與送出/跳過
+        userInputField.disabled = true;
+        submitBtn.disabled = true;
+        nextBtn.disabled = true;
+        userInputField.classList.add("input-disabled");
+        
+        showMessage("🐣 設定好時間後，按「開始挑戰」就可以練習囉！ 單字不會一直重複～", false, false);
+        // 把開始按鈕恢復啟用
+        startGameBtn.disabled = false;
+        startGameBtn.style.opacity = "1";
+    }
+    
+    // 開始遊戲 (啟動計時，啟用所有功能)
+    function startGame() {
+        if (gameActive) {
+            showMessage("遊戲已經進行中囉！專心挑戰吧～", false, false);
+            return;
+        }
+        // 從設定讀取最新時間
+        let mins = parseInt(timeMinutesInput.value) || 0;
+        let secs = parseInt(timeSecondsInput.value) || 0;
+        let totalSec = mins * 60 + secs;
+        if (totalSec < 5) {
+            showMessage("⏰ 時間至少要5秒以上喔！已設為30秒", false, false);
+            totalSec = 30;
+            timeMinutesInput.value = 0;
+            timeSecondsInput.value = 30;
+        }
+        timeRemainingSeconds = totalSec;
+        updateTimerDisplay();
+        
+        // 重置分數 (全新開始)
+        score = 0;
+        totalQuestionsAttempt = 0;
+        lastMilestone = 0;
+        updateScoreUI();
+        
+        // 重置不重複單字系統
+        resetWordHistory();
+        totalQuestionsAttempt = 1;
+        currentWordSpan.innerText = currentRawWord.toLowerCase();
+        userInputField.value = "";
+        
+        // 啟用組件
+        userInputField.disabled = false;
+        submitBtn.disabled = false;
+        nextBtn.disabled = false;
+        userInputField.classList.remove("input-disabled");
+        gameActive = true;
+        
+        // 清除舊計時器
+        stopTimer();
+        // 啟動計時器
+        startTimer();
+        
+        userInputField.focus();
+        showMessage("🎉 挑戰開始！快打出顯示的單字吧！時間倒數中～加油🎉", false, true);
+    }
+    
+    // 更改時間設定(不自動開始)
+    function applyTimeOnly() {
+        if (gameActive) {
+            showMessage("請先結束目前遊戲（時間到或重新開始）再調整時間唷", false, false);
+            return;
+        }
+        let mins = parseInt(timeMinutesInput.value) || 0;
+        let secs = parseInt(timeSecondsInput.value) || 0;
+        let totalSec = mins * 60 + secs;
+        if (totalSec < 5) {
+            alert("時間太短囉～已自動改為30秒");
+            totalSec = 30;
+            timeMinutesInput.value = 0;
+            timeSecondsInput.value = 30;
+        }
+        timeRemainingSeconds = totalSec;
+        updateTimerDisplay();
+        showMessage(`時間已設定為 ${Math.floor(totalSec/60)}分${totalSec%60}秒，按「開始挑戰」囉！`, false, false);
+    }
+    
+    // 綁定事件
+    function bindEvents() {
+        submitBtn.onclick = () => checkAnswer();
+        nextBtn.onclick = () => skipWord();
+        userInputField.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                checkAnswer();
+            }
+        });
+        applyTimeBtn.onclick = () => applyTimeOnly();
+        startGameBtn.onclick = () => startGame();
+        
+        timeMinutesInput.addEventListener("change", () => {
+            let val = parseInt(timeMinutesInput.value);
+            if (val > 10) timeMinutesInput.value = 10;
+            if (val < 0) timeMinutesInput.value = 0;
+            if (!gameActive) applyTimeOnly();
+        });
+        timeSecondsInput.addEventListener("change", () => {
+            let val = parseInt(timeSecondsInput.value);
+            if (val > 59) timeSecondsInput.value = 59;
+            if (val < 0) timeSecondsInput.value = 0;
+            if (!gameActive) applyTimeOnly();
+        });
+    }
+    
+    // 初始狀態：不開始計時，停用輸入按鈕，顯示提示
+    function initialIdleState() {
+        bindEvents();
+        let initMins = parseInt(timeMinutesInput.value) || 1;
+        let initSecs = parseInt(timeSecondsInput.value) || 30;
+        let initTotal = (initMins * 60) + initSecs;
+        if (initTotal <= 0) initTotal = 90;
+        timeRemainingSeconds = initTotal;
+        updateTimerDisplay();
+        score = 0;
+        updateScoreUI();
+        resetWordHistory();
+        totalQuestionsAttempt = 1;
+        currentWordSpan.innerText = currentRawWord.toLowerCase();
+        userInputField.value = "";
+        userInputField.disabled = true;
+        submitBtn.disabled = true;
+        nextBtn.disabled = true;
+        userInputField.classList.add("input-disabled");
+        gameActive = false;
+        showMessage("🐣 設定秒數 ➕ 然後點「開始挑戰」！單字不會一直重複喔！", false, false);
+    }
+    
+    initialIdleState();
+</script>
+</body>
+</html>
